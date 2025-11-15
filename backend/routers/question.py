@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, Header
-from sqlmodel import Session, select
+from sqlmodel import Session
 from pydantic import BaseModel
 from typing import Optional, List
-from database import get_session
-from models import Question, Quiz
 import jwt
+
+from ..database import get_session
+from ..models import Question, Quiz
 from ..auth_config import SECRET_KEY
 
 router = APIRouter()
