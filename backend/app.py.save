@@ -22,3 +22,4 @@ def startup():
 @app.get("/")
 def root():
     return {"message": "Quiz API running"}
+
