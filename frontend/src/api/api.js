@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://quiz-management-system-evsh.onrender.com",
+  baseURL: "https://quiz-management-system-evsh.onrender.com/api",
 });
 
 // Attach admin token to requests
