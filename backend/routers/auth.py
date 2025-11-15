@@ -3,7 +3,8 @@ from pydantic import BaseModel
 from google.oauth2 import id_token
 from google.auth.transport import requests
 import jwt
-from ..auth_config import SECRET_KEY, GOOGLE_CLIENT_ID, ALLOWED_ADMINS
+from backend.auth_config import SECRET_KEY, GOOGLE_CLIENT_ID, ALLOWED_ADMINS
+
 
 router = APIRouter()
 

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .database import init_db
-from .routers import quiz, question, auth
+from backend.database import init_db
+from backend.routers import quiz, question, auth
 from . import models
 
 app = FastAPI(title="Quiz Management System")
