@@ -1,4 +1,5 @@
 from sqlmodel import SQLModel, create_engine, Session
+from . import models  # Import models to register them with SQLModel
 
 DATABASE_URL = "sqlite:///./quiz.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})

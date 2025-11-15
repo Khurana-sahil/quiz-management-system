@@ -36,14 +36,15 @@ def get_quiz_admin(quiz_id: int, session: Session = Depends(get_session)):
     return {
         "id": quiz.id,
         "title": quiz.title,
-        "questions": [
+       "questions": [
             {
-                "id": q.id,
-                "text": q.text,
-                "type": q.type,
-                "options": q.options,
-                "correct_answer": q.correct_answer,
+            "id": q.id,
+            "question_text": q.question_text,
+            "question_type": q.question_type,
+            "options": q.options,
+            "correct_answer": q.correct_answer,
             }
             for q in questions
         ],
+
     }

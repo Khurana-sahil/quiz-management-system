@@ -1,22 +1,27 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import init_db
-from .routers import quiz, question
+from . import models   # ensure models are registered
+from .routers.quiz import router as quiz_router
+from .routers.question import router as question_router
 
 app = FastAPI(title="Quiz Management System")
 
+# CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],   # allow frontend
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.include_router(quiz.router, prefix="/api")
-app.include_router(question.router, prefix="/api")
+# Register routers
+app.include_router(quiz_router, prefix="/api")
+app.include_router(question_router, prefix="/api")
 
+# Startup — init DB
 @app.on_event("startup")
-def startup():
+def on_startup():
     init_db()
 
 @app.get("/")
