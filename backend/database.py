@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel, create_engine, Session
-from backend import models  # absolute import so Render recognizes package
+import models  # absolute import so Render recognizes package
 
 
 # Use sqlite file in project root
