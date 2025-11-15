@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlmodel import Session, select
 from typing import List
 from pydantic import BaseModel
-from backend.database import get_session
-from backend.models import Quiz, Question
+from database import get_session
+from models import Quiz, Question
 import jwt
 from ..auth_config import SECRET_KEY
 
