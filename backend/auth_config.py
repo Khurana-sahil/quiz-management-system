@@ -1,7 +1,9 @@
-SECRET_KEY = "SUPER_SECRET_CHANGE_THIS"
+import os
 
-GOOGLE_CLIENT_ID = "227429083368-lu5bqbc4e4hmbotiv0ea8kdmdbjull9o.apps.googleusercontent.com"
+SECRET_KEY = os.getenv("SECRET_KEY")
 
-ALLOWED_ADMINS = {
-    "khuranasahil1801@gmail.com"   # change this to your Google admin email
-}
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+
+# Render stores this as comma-separated string
+admins = os.getenv("ALLOWED_ADMINS", "")
+ALLOWED_ADMINS = {email.strip() for email in admins.split(",") if email.strip()}
