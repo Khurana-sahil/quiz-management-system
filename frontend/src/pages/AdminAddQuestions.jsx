@@ -3,6 +3,11 @@ import { addQuestionAPI } from "../api/api";
 import { useParams } from "react-router-dom";
 
 export default function AdminAddQuestions() {
+    if (!localStorage.getItem("admin_token")) {
+  window.location.href = "/admin/login";
+  return null;
+        }
+
   const { id } = useParams(); // quiz id
 
   const [text, setText] = useState("");

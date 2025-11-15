@@ -1,43 +1,56 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel import Session
-from ..database import get_session
-from ..models import Question, Quiz
+from fastapi import APIRouter, Depends, HTTPException, Header
+from sqlmodel import Session, select
 from pydantic import BaseModel
 from typing import Optional, List
+from ..database import get_session
+from ..models import Question, Quiz
+import jwt
+from ..auth_config import SECRET_KEY
 
 router = APIRouter()
 
+
+# ADMIN CHECK
+def require_admin(x_token: str = Header(None)):
+    if not x_token:
+        raise HTTPException(401, "Missing admin token")
+
+    try:
+        data = jwt.decode(x_token, SECRET_KEY, algorithms=["HS256"])
+        return data["email"]
+    except:
+        raise HTTPException(403, "Admin only")
+
+
 class QuestionCreate(BaseModel):
-    question_text: str
-    question_type: str
+    text: str
+    type: str
     options: Optional[List[str]] = None
     correct_answer: Optional[str] = None
 
-@router.post("/quiz/{quiz_id}/questions")
+
+@router.post("/quiz/{quiz_id}/questions", dependencies=[Depends(require_admin)])
 def add_question(quiz_id: int, payload: QuestionCreate, session: Session = Depends(get_session)):
     quiz = session.get(Quiz, quiz_id)
     if not quiz:
-        raise HTTPException(status_code=404, detail="Quiz not found")
+        raise HTTPException(404, "Quiz not found")
 
-    question_type = payload.question_type.lower()
-
-    # Validation rules
-    if question_type == "mcq":
+    if payload.type == "mcq":
         if not payload.options or len(payload.options) < 2:
-            raise HTTPException(status_code=400, detail="MCQ must contain at least two options.")
+            raise HTTPException(400, "MCQ needs at least 2 options")
         if payload.correct_answer not in payload.options:
-            raise HTTPException(status_code=400, detail="Correct answer must be one of the options.")
+            raise HTTPException(400, "Correct answer must be one of the options")
 
-    if question_type == "true_false":
-        if payload.correct_answer not in ["true", "false"]:
-            raise HTTPException(status_code=400, detail="Correct answer must be 'true' or 'false'")
+    if payload.type == "true_false":
+        if payload.correct_answer not in ["true", "false", "True", "False"]:
+            raise HTTPException(400, "Correct answer must be true/false")
 
     question = Question(
         quiz_id=quiz_id,
-        question_text=payload.question_text,
-        question_type=payload.question_type,
+        question_text=payload.text,
+        question_type=payload.type,
         options=payload.options,
-        correct_answer=payload.correct_answer,
+        correct_answer=payload.correct_answer
     )
 
     session.add(question)
