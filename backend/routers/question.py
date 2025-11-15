@@ -4,9 +4,14 @@ from pydantic import BaseModel
 from typing import Optional, List
 import jwt
 
-from ..database import get_session
-from ..models import Question, Quiz
-from ..auth_config import SECRET_KEY
+try:  # Support running as package (backend.*) and as top-level module
+    from ..database import get_session
+    from ..models import Question, Quiz
+    from ..auth_config import SECRET_KEY
+except ImportError:  # pragma: no cover
+    from database import get_session  # type: ignore
+    from models import Question, Quiz  # type: ignore
+    from auth_config import SECRET_KEY  # type: ignore
 
 router = APIRouter()
 
