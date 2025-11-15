@@ -3,7 +3,11 @@ from pydantic import BaseModel
 from google.oauth2 import id_token
 from google.auth.transport import requests
 import jwt
-from backend.auth_config import SECRET_KEY, GOOGLE_CLIENT_ID, ALLOWED_ADMINS
+
+try:  # Support both package and top-level execution contexts
+    from ..auth_config import SECRET_KEY, GOOGLE_CLIENT_ID, ALLOWED_ADMINS
+except ImportError:  # pragma: no cover
+    from auth_config import SECRET_KEY, GOOGLE_CLIENT_ID, ALLOWED_ADMINS  # type: ignore
 
 
 router = APIRouter()

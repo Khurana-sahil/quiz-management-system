@@ -1,8 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from database import init_db
-from routers import quiz, question, auth
-from . import models
+
+try:  # Support running as package (backend.*) and top-level for local dev
+    from .database import init_db
+    from .routers import quiz, question, auth
+    from . import models  # noqa: F401
+except ImportError:  # pragma: no cover
+    from database import init_db  # type: ignore
+    from routers import quiz, question, auth  # type: ignore
+    import models  # type: ignore  # noqa: F401
 
 app = FastAPI(title="Quiz Management System")
 
