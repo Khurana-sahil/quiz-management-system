@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlmodel import Session
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, AliasChoices
 from typing import Optional, List
 import jwt
 
@@ -29,8 +29,9 @@ def require_admin(x_token: str = Header(None)):
 
 
 class QuestionCreate(BaseModel):
-    text: str
-    type: str
+    # Accept both new and legacy frontend keys using validation aliases
+    text: str = Field(validation_alias=AliasChoices("text", "question_text"))
+    type: str = Field(validation_alias=AliasChoices("type", "question_type"))
     options: Optional[List[str]] = None
     correct_answer: Optional[str] = None
 
