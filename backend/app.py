@@ -14,9 +14,17 @@ app = FastAPI(title="Quiz Management System")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    # Be explicit to avoid edge cases with some hosts/proxies dropping wildcard CORS on redirects/errors
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "https://localhost:5173",
+        "https://127.0.0.1:5173",
+    ],
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_methods=["*"],
     allow_headers=["*"],
+    allow_credentials=False,
 )
 
 app.include_router(auth.router, prefix="/api")
