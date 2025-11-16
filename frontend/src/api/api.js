@@ -2,7 +2,7 @@ import axios from "axios";
 // trigger vercel redeploy
 
 const api = axios.create({
-  baseURL: "https://quiz-management-system-1-r9ob.onrender.com",
+  baseURL: "https://quiz-management-system-1-r9ob.onrender.com/api",
 });
 
 // Attach admin token to requests
