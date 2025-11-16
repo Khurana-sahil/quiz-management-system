@@ -23,8 +23,8 @@ export default function AdminAddQuestions() {
     }
 
     let payload = {
-      question_text: text,
-      question_type: type,
+      text,
+      type,
       options: null,
       correct_answer: correctAnswer,
     };

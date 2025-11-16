@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function AdminHome() {
   const [quizzes, setQuizzes] = useState([]);
+  const isAdmin = !!localStorage.getItem("admin_token");
 
   useEffect(() => {
     loadQuizzes();
@@ -27,13 +28,22 @@ export default function AdminHome() {
         <div key={quiz.id} style={{ marginBottom: "15px", borderBottom: "1px solid #666", paddingBottom: "10px" }}>
           <h3>{quiz.title}</h3>
 
-          <Link to={`/admin/quiz/${quiz.id}/add`}>
-            <button style={{ marginRight: "10px" }}>Add Questions</button>
+          {/* Public: Take Quiz */}
+          <Link to={`/quiz/${quiz.id}`}>
+            <button style={{ marginRight: "10px" }}>Take Quiz</button>
           </Link>
 
-          <Link to={`/admin/quiz/${quiz.id}`}>
-            <button>View Quiz</button>
-          </Link>
+          {/* Admin-only actions */}
+          {isAdmin && (
+            <>
+              <Link to={`/admin/quiz/${quiz.id}/add`}>
+                <button style={{ marginRight: "10px" }}>Add Questions</button>
+              </Link>
+              <Link to={`/admin/quiz/${quiz.id}`}>
+                <button>Admin View</button>
+              </Link>
+            </>
+          )}
         </div>
       ))}
     </div>
